@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import './App.css'
 import Card from './components/Card/Card'
 
@@ -6,6 +7,7 @@ import Header from './components/Header/Header'
 
 function App() {
 
+  const [devmons, setDevmons] = useState([])
  
   // const java = {
   //   nome: 'Java',
@@ -35,8 +37,6 @@ function App() {
   // }
   // const devmons = [java,kotlin,android,c, cPlusPlus]
 
-  const devmons = []
-
   async function fetchData() {
     
     const apiUrl = 'https://backend-integrar-com-o-frontend.onrender.com/personagem'
@@ -45,14 +45,16 @@ function App() {
 
     const data = await response.json()
     
-    console.log(45, data);
+    setDevmons(data)
     
   }
+useEffect(function(){
   fetchData()
-
-
+},[])
   
 
+  console.log(devmons);
+  
   return (
     <>
       Lista de Cards com Map:
@@ -63,7 +65,7 @@ function App() {
         {devmons.map((devmon)=>{
                   
          return (
-          <Card key={devmon.nome} nome={devmon.nome} imagem={devmon.imagem} evoluiPara={devmon.evoluiPara}/>
+          <Card key={devmon._id} nome={devmon.nome} imagem={devmon.imagem} evoluiPara={devmon.evoluiPara}/>
                     
          )
           
