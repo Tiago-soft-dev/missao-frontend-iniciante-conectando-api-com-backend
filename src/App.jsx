@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import Card from './components/Card/Card'
-
-
 import Header from './components/Header/Header'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
 
   const [devmons, setDevmons] = useState([])
- 
+
   // const java = {
   //   nome: 'Java',
   //   imagem: 'https://salvatore.academy/devmon/1_java.png',
@@ -38,23 +38,28 @@ function App() {
   // const devmons = [java,kotlin,android,c, cPlusPlus]
 
   async function fetchData() {
-    
+
     const apiUrl = 'https://backend-integrar-com-o-frontend.onrender.com/personagem'
 
-    const response = await fetch(apiUrl)
+    const response = await fetch(apiUrl).catch((error) => {
+      toast.error('Erro ao carregar lista de DevMon.')
+    })
 
-    const data = await response.json()
-    
-    setDevmons(data)
-    
+    if(response.ok) {
+      const data = await response.json()
+
+      setDevmons(data)
+    } else {
+      toast.error('Erro ao carregar lista de DevMon.')
+    }
   }
-useEffect(function(){
-  fetchData()
-},[])
-  
+  useEffect(function () {
+    fetchData()
+  }, [])
+
 
   console.log(devmons);
-  
+
   return (
     <>
       Lista de Cards com Map:
@@ -62,13 +67,13 @@ useEffect(function(){
       <br />
       <Header />
       <div className='cards'>
-        {devmons.map((devmon)=>{
-                  
-         return (
-          <Card key={devmon._id} nome={devmon.nome} imagem={devmon.imagem} evoluiPara={devmon.evoluiPara}/>
-                    
-         )
-          
+        {devmons.map((devmon) => {
+
+          return (
+            <>
+              <Card key={devmon._id} nome={devmon.nome} imagem={devmon.imagem} evoluiPara={devmon.evoluiPara} />
+              <ToastContainer />
+            </>)
         })}
       </div>
 
